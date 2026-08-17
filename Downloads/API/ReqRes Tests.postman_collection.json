@@ -1,0 +1,31 @@
+{
+  "info": {
+    "_postman_id": "d64f9b87-ab1b-49f2-966e-9078262b73e9",
+    "name": "ReqRes Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48280312"
+  },
+  "item": [
+    {
+      "name": "Get Single User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/users/2",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "users",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
