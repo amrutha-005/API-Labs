@@ -13,17 +13,29 @@
           "name": "List Users",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": " pub_4f16acbf50aeea56502ebfe2157d6524c4075cf110d688f3b7d1695ebff76a63",
+                "type": "text"
+              }
+            ],
             "url": {
-              "raw": "https://jsonplaceholder.typicode.com/users",
+              "raw": "https://reqres.in/api/users?page=2",
               "protocol": "https",
               "host": [
-                "jsonplaceholder",
-                "typicode",
-                "com"
+                "reqres",
+                "in"
               ],
               "path": [
+                "api",
                 "users"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "2"
+                }
               ]
             }
           },
@@ -36,9 +48,30 @@
       "item": [
         {
           "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var responseData = pm.response.json();\r",
+                  "pm.environment.set(\"user_id\", responseData.id);\r",
+                  "console.log(\"Saved User ID: \" + responseData.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "pub_4f16acbf50aeea56502ebfe2157d6524c4075cf110d688f3b7d1695ebff76a63",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"leader\"\r\n}",
@@ -49,16 +82,102 @@
               }
             },
             "url": {
-              "raw": "{{URL}}/users",
+              "raw": "https://reqres.in/api/users",
+              "protocol": "https",
               "host": [
-                "{{URL}}"
+                "reqres",
+                "in"
               ],
               "path": [
+                "api",
                 "users"
               ]
             }
           },
           "response": []
+        },
+        {
+          "name": "Register user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Request Level Test: Validate 200 OK and response token\r",
+                  "pm.test(\"Request Level - Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Request Level - Response has token\", function () {\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData).to.have.property(\"token\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": " pub_4f16acbf50aeea56502ebfe2157d6524c4075cf110d688f3b7d1695ebff76a63",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"{{email}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://reqres.in/api/register",
+              "protocol": "https",
+              "host": [
+                "reqres",
+                "in"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "exec": [
+              "// Folder Level Test: Ensure all POST responses return faster than 2000ms\r",
+              "pm.test(\"Folder Level - Response time is less than 2000ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+              "});"
+            ]
+          }
         }
       ]
     }
@@ -82,7 +201,10 @@
         "packages": {},
         "requests": {},
         "exec": [
-          ""
+          "// Collection Level Test: Check that Content-Type header exists on all responses\r",
+          "pm.test(\"Collection Level - Content-Type header is present\", function () {\r",
+          "    pm.response.to.have.header(\"Content-Type\");\r",
+          "});"
         ]
       }
     }
